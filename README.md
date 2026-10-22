@@ -10,7 +10,6 @@ Production-ready WordPress deployment stack optimized for Dokploy with Redis cac
 | **Nginx** | Optimized reverse proxy with caching and security headers |
 | **MySQL 9.4** | Database server with health checks |
 | **Redis 8** | Object caching for improved performance |
-| **phpMyAdmin** | Database administration interface |
 
 ## Features
 
@@ -55,12 +54,12 @@ Go to the **Domains** tab and add:
 | Domain | Service | Port |
 |--------|---------|------|
 | yourdomain.com | nginx | 80 |
-| pma.yourdomain.com | phpmyadmin | 80 |
 
-**Default Credentials:**
-| Service | Username | Password |
-|---------|----------|----------|
-| phpMyAdmin | wordpress | (your MYSQL_PASSWORD) |
+**Database access:** no web UI is exposed. Use the MySQL client inside the db container:
+
+```bash
+docker exec -it <project>-db-1 mysql -u wordpress -p wordpress
+```
 
 ### Activate Redis Cache
 
@@ -126,8 +125,6 @@ All environment variables can be changed at any time and take effect on redeploy
 | `DB_MEMORY_LIMIT` | 1G | MySQL memory limit |
 | `REDIS_CPU_LIMIT` | 0.5 | Redis CPU limit |
 | `REDIS_MEMORY_LIMIT` | 512M | Redis memory limit |
-| `PHPMYADMIN_CPU_LIMIT` | 0.5 | phpMyAdmin CPU limit |
-| `PHPMYADMIN_MEMORY_LIMIT` | 256M | phpMyAdmin memory limit |
 
 ## Volumes
 
@@ -140,9 +137,8 @@ All environment variables can be changed at any time and take effect on redeploy
 ## Security Recommendations
 
 1. Set strong passwords for all database credentials
-2. Consider restricting access to phpMyAdmin subdomain
-3. Enable Dokploy's built-in SSL/TLS
-4. Keep WordPress and plugins updated
+2. Enable Dokploy's built-in SSL/TLS
+3. Keep WordPress and plugins updated
 
 ## License
 
